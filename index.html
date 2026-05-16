@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div
+        style="box-shadow: 5px 5px 5px 5px grey; border-radius: 8px; width: 1250px; height: auto; border: none; padding: 20px; gap: 20px;">
+        <h1 style="display: flex; justify-content: center;">Todo App</h1>
+        <input style="width: 1230px; height: 30px;" type="text">
+        <button
+            style="width: 1230px; height: 30px; margin-top: 20px; color: white; border: none; background-color: rgb(79, 79, 255); border-radius: 8px;">Add</button>
+        <hr>
+        <div id="display"></div>
+    </div>
+</body>
+<script>
+    const display = document.getElementById("display");
+    async function index() {
+        try {
+            const theapi = await fetch("http://localhost:3000/todos/");
+            const thejson = await theapi.json();
+            display.innerHTML = thejson.map((data) => (`
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 onclick="onclickfunction('${data.id}')">${data.title}</h2>
+            <button style="border: none; color: white; background-color: rgb(255, 49, 49); border-radius: 8px; width: 100px; height: 30px; margin-right: 20px;">Delete</button>
+        </div>
+        `)).join('');
+        } catch (error) {
+            console.log("this is the error", error)
+        }
+    }
+    index()
+
+    async function onclickfunction(id) {
+        try {
+            const request = await fetch(`http://localhost:3000/todos/${id}`);
+            const response = await request.json();
+            display.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>${response.title}</h2>
+            <button style="border: none; color: white; background-color: rgb(255, 49, 49); border-radius: 8px; width: 100px; height: 30px; margin-right: 20px;">Delete</button>
+        </div>
+            `
+        } catch (error) {
+            
+        }
+    }
+    
+</script>
+
+</html>
